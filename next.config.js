@@ -7,7 +7,19 @@ const nextConfig = {
             {protocol:"https",hostname:"*.googleusercontent.com"},
             {protocol:"https",hostname:"firebasestorage.googleapis.com"},
         ]
-    }
+    },
+    
+    webpack: (config) => {
+      config.resolve.fallback = { fs: false,
+        path: false };
+  
+      return config;
+    },
+    
 }
 
-module.exports = nextConfig
+
+
+
+
+

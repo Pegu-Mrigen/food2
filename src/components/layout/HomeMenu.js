@@ -1,16 +1,30 @@
+"use client"
 import Image from "next/image";
-import React from "react";
-import MenuItem from "../menu/MenuItem";
+import React, { useEffect, useState } from "react";
+import MenuItem from "../menu/MenuItem111";
 import SectionHeaders from "./SectionHeaders";
 
 const HomeMenu = () => {
+
+  const [bestSellers, setBestSellers]=useState([])
+
+  useEffect(()=>{
+    fetch("/api/menu-items").then(res=>{
+      res.json().then(menuItems=>{
+        //const bestSellers=menuItems.slice(-3)
+       // console.log(bestSellers)
+       setBestSellers(menuItems.slice(-3))
+      })
+    })
+
+  }, [])
   return (
-    <section>
+    <section class>
       <div className="relative left-0 right-0 justify-start   ">
         <div className="h-48 w-48 absolute -left-64 rotate-180  -z-10 overflow-x-hidden  ">
           <Image src={"/leafs.png"} alt="" layout="fill" objectFit="contain " />
         </div>
-        <div className="h-48  -top-12 -z-10 overflow-x-hidden ">
+        <div className="h-1 -z-10 overflow-x-hidden ">
           <Image
             src={"/leafs.png"}
             alt=""
@@ -22,19 +36,16 @@ const HomeMenu = () => {
         </div>
       </div>
       <div className="text-center mb-4">
-        <SectionHeaders subHeader="Checkout" mainHeader="Menu" />
+        <SectionHeaders subHeader="Checkout" mainHeader="Our Best Sellers" />
       </div>
 
       <div className="grid grid-cols-3 gap-4">
-        <MenuItem />
-        <MenuItem />
-        <MenuItem />
-        <MenuItem />
-        <MenuItem />
-        <MenuItem />
-        <MenuItem />
-        <MenuItem />
-        <MenuItem />
+        {bestSellers?.length>0 &&
+      bestSellers.map(item=>(
+        <MenuItem key={item._id} {...item}  />
+      ))  
+      }
+        
       </div>
     </section>
   );

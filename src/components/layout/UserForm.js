@@ -10,6 +10,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useProfile } from "../UseProfile";
 
 const UserForm = ({user, onSave}) => {
   const [username, setUsername] = useState(user?.name||"");  
@@ -23,8 +24,11 @@ const UserForm = ({user, onSave}) => {
   const [postalCode, setPostalCode] = useState(user?.postalCode||"");
   const [city, setCity] = useState(user?.city||"");
   const [country, setCountry] = useState(user?.country||"");
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [admin, setAdmin] = useState(user?.admin || false);
   const [profileFetched, setProfileFetched] = useState(false);
+
+
+  const {userData:loggedInUserData} = useProfile()
 
   useEffect(() => {
    
@@ -89,7 +93,7 @@ const UserForm = ({user, onSave}) => {
             <div className="bg-gray-200  rounded-lg max-w-[120px]">
               <Image
                 className="rounded-lg w-full h-full mb-1"
-                src={data?.img||user.image}                
+                src={data?.img||user?.image}                
                 alt=""
                 width={300}
                 height={300}
@@ -119,7 +123,7 @@ const UserForm = ({user, onSave}) => {
               
             </div>
           </div>
-          <form className="grow" onSubmit={e=>onSave(e,{name:username, image:data?.img, phone,streetAddress,city, country,postalCode  })}>
+          <form className="grow" onSubmit={e=>onSave(e,{name:username, image:data?.img, phone,streetAddress,city, country,postalCode, admin  })}>
             <label>First and last name</label>
             <input
               type="text"
@@ -149,7 +153,7 @@ const UserForm = ({user, onSave}) => {
               value={streetAddress}
               onChange={(e) => setStreetAddress(e.target.value)}
             />
-           <div className="flex gap-2">
+           <div className="grid grid-cols-2 gap-2">
            <div>
            <label>Postal code</label>
             <input 
@@ -179,6 +183,12 @@ const UserForm = ({user, onSave}) => {
               value={country}
               onChange={(e) => setCountry(e.target.value)}
             />
+            {loggedInUserData.admin && <div>
+              {JSON.stringify(admin)}
+              
+              
+              <label htmlFor="adminCb" className="p-2 inline-flex items-center gap-2 mb-2" ><input id="adminCb" type="checkbox" value={"1"} checked={admin} onClick={e=>setAdmin(e.target.checked)} /><span>Admin</span></label>
+            </div>}
             <button type="submit">Save</button>
           </form>
     </section>

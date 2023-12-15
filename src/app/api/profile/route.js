@@ -8,12 +8,39 @@ export async function PUT(req) {
 
   const data = await req.json();
 
-  const session = await getServerSession(authOptions);
-  console.log({ session, data });
-  const email = session?.user?.email;
+  const {_id, ...otherData} = data
+
+  // if(_id){
+  //   await User.updateOne({ _id }, data);
+    
+
+  // }else
+
+  // {const session = await getServerSession(authOptions);
+  // //console.log({ session, data });
+  // const email = session?.user?.email;
   
 
-  await User.updateOne({ email }, data);
+  // await User.updateOne({ email }, data);}
+  const session = await getServerSession(authOptions);
+
+  const email = session?.user?.email;
+
+
+  let filter={}
+  if(_id){
+    filter={_id}
+    }else
+
+  {
+  filter={email}
+}
+  
+
+  await User.updateOne(filter, otherData);
+  //await User.findOneAndUpdate(filter, otherData);
+
+  
 
   
   if(!email){

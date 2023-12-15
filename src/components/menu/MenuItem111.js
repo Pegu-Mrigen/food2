@@ -19,20 +19,19 @@ const MenuItem = (menuItem) => {
 
   function handleAddToCartButtonClick(){
 
-    if(showPopup){
-      addToCart(menuItem, selectedExtra, selectedSize)
-      toast.success("Added to cart!")
-      setShowPopup(false)
+    const selectedOptions= sizes.length>0 || extraIngredientPrice.length>0
+    if(selectedOptions && !showPopup){
+      setShowPopup(true)
+      return;
       
     }else{
-
-      const selectedOptions= sizes.length>0 || extraIngredientPrice.length>0
-      if(selectedOptions){
-        setShowPopup(true)
-      }else{
-        addToCart()
-        toast.success("Added to cart!")
-      }
+      
+      addToCart(menuItem, selectedExtra, selectedSize)
+      setShowPopup(false)
+      toast.success("Added to cart!")
+      
+       
+      
     }
   }
   function handleExtraClick(e, extra){
@@ -131,7 +130,7 @@ const MenuItem = (menuItem) => {
       </button>
     </div> */}
 
-    <MenuItemTile {...menuItem} onAddToCart={handleAddToCartButtonClick} />
+    {/* <MenuItemTile {...menuItem} onAddToCart={handleAddToCartButtonClick} /> */}
         </>
   );
 };
